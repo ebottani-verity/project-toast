@@ -3,7 +3,7 @@ import React from "react";
 import Button from "../Button";
 
 import styles from "./ToastPlayground.module.css";
-import Toast from "../Toast/Toast";
+import { ToastContext } from "../ToastProvider/ToastProvider";
 
 const VARIANT_OPTIONS = ["notice", "warning", "success", "error"];
 
@@ -12,9 +12,13 @@ function ToastPlayground() {
     VARIANT_OPTIONS[0]
   );
   const [message, setMessage] = React.useState("");
-  const [isToastOpen, setIsToastOpen] = React.useState(true);
+  const { addToast } = React.useContext(ToastContext);
 
-  console.log(message);
+  const handleaAdd = () => {
+    addToast(message, selectedVariant)
+    setMessage('')
+    setSelectedVariant(VARIANT_OPTIONS[0])
+  }
 
   return (
     <div className={styles.wrapper}>
@@ -23,11 +27,6 @@ function ToastPlayground() {
         <h1>Toast Playground</h1>
       </header>
 
-      {isToastOpen && (
-        <Toast variant={selectedVariant} onClose={() => setIsToastOpen(false)}>
-          {message}
-        </Toast>
-      )}
 
       <div className={styles.controlsWrapper}>
         <div className={styles.row}>
@@ -72,7 +71,7 @@ function ToastPlayground() {
         <div className={styles.row}>
           <div className={styles.label} />
           <div className={`${styles.inputWrapper} ${styles.radioWrapper}`}>
-            <Button onClick={() => setIsToastOpen(true)}>Pop Toast!</Button>
+            <Button onClick={handleaAdd}>Pop Toast!</Button>
           </div>
         </div>
       </div>
